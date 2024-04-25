@@ -1,3 +1,4 @@
+
 import random
 import math
 
@@ -17,14 +18,14 @@ class NeuralNetwork:
             self.layers.append(NeuralLayer(topology[i], topology[i-1]))
 
     def feed_forward(self, inputs):
-        for i in range(len(inputs)):
+        for i in range(min(len(inputs), len(self.layers[0].neurons))):
             self.layers[0].neurons[i].output = inputs[i]
-        
+
         for i in range(1, len(self.layers)):
             for j in range(len(self.layers[i].neurons)):
                 neuron = self.layers[i].neurons[j]
                 sum_weights_outputs = sum(weight * prev_neuron.output for weight, prev_neuron in zip(neuron.weights, self.layers[i-1].neurons))
-                neuron.output = self.sigmoid(sum_weights_outputs)
+                neuron.output = sum_weights_outputs
 
         return [neuron.output for neuron in self.layers[-1].neurons]
 
@@ -47,18 +48,16 @@ class NeuralNetwork:
                     neuron.weights = weights
 
 # Example usage
-nn = NeuralNetwork([2, 4, 1])  # create a neural network with topology [2, 4, 1]
 
-# Train the neural network here...
 
-nn.save_weights('weights.csv')  # save the weights to a file
+nn2 = NeuralNetwork([4, 4, 10 , 10 , 10 , 10 ,2])  # create a new neural network with the same topology
 
-nn2 = NeuralNetwork([2, 4, 1])  # create a new neural network with the same topology
 
-nn2.load_weights('weights.csv')  # load the weights from the file
-
-inputs = [1.0, 0.5]  # create input data
+inputs = [4,2,3,33]  # create input data
 
 output = nn2.feed_forward(inputs)  # run feedforward algorithm on the loaded network with the input data
 
-print('Result:', output)  # print the output as the result
+print('Result:', output[0])  # print the output as the result
+
+
+
